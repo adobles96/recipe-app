@@ -1,8 +1,11 @@
-FROM python:3.7-alpine
+FROM python:3.7.5-alpine
 # The alpine image is a lighter weight version of python.
 
 # Prevents python from buffering output.
 ENV PYTHONUNBUFFERED 1
+
+# Patch to fix issue w/ typed_ast dependency. See: https://github.com/PyCQA/pylint/issues/2291
+RUN apk add --no-cache --update python3-dev  gcc build-base
 
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt

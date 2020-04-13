@@ -7,6 +7,7 @@ services:
         ports:
             - 8000:8000
         volumes:
-            - ./app:/app
+            - ./app:/app # This way we get code updates immediately w/o having to rebuild the image.
+        # This command runs the dev server.
         command: >
             sh -c "python manage.py runserver 0.0.0.0:8000"
