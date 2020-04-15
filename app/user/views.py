@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, authentication, permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 
@@ -16,4 +16,14 @@ class CreateTokenView(ObtainAuthToken):
     # So we can render the post request from the browser. Otherwise we'd need to use postman to
     # view/test the requests.
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+class ManageUserView(generics.RetrieveUpdateAPIView):
+    """ Manage the authenticated user. """
+    serializer_class = UserSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
     
+    # We override the get_object so as to only retrieve info about the authenticated user.
+    def get_object(self):
+        """ Retrieve and return authenticated user. """
+        return self.request.user  # user is an attr of the request because we required auth above.
